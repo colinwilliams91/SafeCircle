@@ -10,7 +10,15 @@ inside agent prompts — eliminating hallucinated APIs.
 
 ## Configuration
 
-Context7 is configured in your **global / workspace `mcp.json`**. A minimal entry:
+Two committed config files provide Context7 to all harnesses — no manual setup
+required after cloning:
+
+| File | Key format | Harnesses |
+|------|-----------|-----------|
+| `.mcp.json` (repo root) | `mcpServers` | Claude Code, Codex CLI, and any harness following the cross-IDE MCP standard |
+| `.vscode/mcp.json` | `servers` | VS Code, Cursor, Windsurf |
+
+### `.mcp.json` (root — harness-agnostic)
 
 ```json
 {
@@ -23,8 +31,24 @@ Context7 is configured in your **global / workspace `mcp.json`**. A minimal entr
 }
 ```
 
-> **Never commit `mcp.json` files that contain API keys.** Use environment
-> variables or a secrets manager. The pattern `mcp.local.json` is git-ignored.
+### `.vscode/mcp.json` (VS Code family)
+
+```json
+{
+  "servers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    }
+  }
+}
+```
+
+For machine-local overrides (e.g. to pin a version or supply an API key), create
+**`.mcp.local.json`** or **`.vscode/mcp.local.json`** — both patterns are git-ignored.
+
+> **Never add API keys or secrets to either committed config file.** Use environment
+> variables or the `.local` override files for sensitive values.
 
 ---
 
