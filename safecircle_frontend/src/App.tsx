@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
-import { fetchGuardianOverview } from "./api/safecircle";
+import { predictSafety } from "./api/safecircle";
 import type { RiskLevel } from "./api/safecircle";
-import { riskLevelFrom } from "./lib/reasons";
+import { inferReasons, normalizePredictResponse, riskLevelFrom } from "./lib/reasons";
 import { Badge } from "./ui/Badge";
 import { Button } from "./ui/Button";
 import { Card } from "./ui/Card";
@@ -127,11 +127,11 @@ export default function App() {
     "Demo data shown. Click refresh to pull from backend.",
   );
   const [guardianLoading, setGuardianLoading] = useState(false);
-  const [guardianData, setGuardianData] = useState<{
+  const guardianData: {
     currentRiskLevel: RiskLevel;
     recentSignals: string[];
     privacyNotes: string[];
-  }>({
+  } = {
     currentRiskLevel: "medium",
     recentSignals: [
       "Repeated harassment language detected",
@@ -144,7 +144,17 @@ export default function App() {
       "Consent-based escalation options",
       "Pattern summaries instead of private content exposure",
     ],
-  });
+  };
+
+  function guardianCopy(level: RiskLevel) {
+    if (level === "high") {
+      return "High risk detected. Consider immediate support and guidance without exposing full transcripts.";
+    }
+    if (level === "medium") {
+      return "Moderate risk detected. Monitor patterns and check in with the child.";
+    }
+    return "Low risk detected. No immediate action needed, keep supportive check-ins.";
+  }
 
   const childTranscript = useMemo(
     () => [
@@ -177,25 +187,40 @@ export default function App() {
     });
   }
 
-  function demoPresetFromText(text: string) {
-    const lower = text.toLowerCase();
-    if (
-      lower.includes("worthless") ||
-      lower.includes("stupid") ||
-      lower.includes("nobody likes you")
-    ) {
-      return PRESET_BULLY;
+  async function onAnalyze() {
+    const text = message.trim();
+    if (!text) return;
+
+    setAnalysis({ status: "loading" });
+    try {
+      const data = await predictSafety({ text });
+      const normalized = normalizePredictResponse(data);
+      const serverReasons = normalized.reasons;
+      const fallbackReasons = inferReasons(text, normalized.labelName);
+      const reasons =
+        serverReasons.length > 0 ? serverReasons : fallbackReasons;
+      const riskLevel = riskLevelFrom(
+        normalized.labelName,
+        normalized.unsafeScore,
+      );
+
+      setAnalysis({
+        status: "ready",
+        labelName: normalized.labelName,
+        unsafeScore: normalized.unsafeScore,
+        reasons,
+        riskCategory: normalized.riskCategory,
+        riskLevel,
+      });
+    } catch {
+      setAnalysis({
+        status: "error",
+        message:
+          "Could not reach the backend. Make sure the API is running on port 8000.",
+      });
     }
-    if (
-      lower.includes("don't tell") ||
-      lower.includes("dont tell") ||
-      lower.includes("meet me") ||
-      lower.includes("alone")
-    ) {
-      return PRESET_UNSAFE;
-    }
-    return PRESET_SAFE;
   }
+
 
   function handleChildSubmit() {
     if (safetyPanelRef.current) {
@@ -216,17 +241,55 @@ export default function App() {
     setActionNote("Action selected: Ignore. No data is shared.");
   }
 
+  async function actionLearn() {
+    setActionNote(
+      "Action selected: Learn More. The user sees a privacy explanation and safety tips.",
+    );
+    setTab("privacy");
+  }
+
+  async function actionReport() {
+    setActionNote(
+      "Action selected: Report Anonymously. Only minimal safety signals would be shared, not the full transcript.",
+    );
+  }
+
+  async function actionNotifyGuardian() {
+    setActionNote(
+      "Action selected: Notify guardian with privacy summary. Only risk patterns are shared.",
+    );
+  }
+
   async function refreshGuardian() {
     setGuardianLoading(true);
     setGuardianNote("Refreshing from backend...");
     try {
-      const data = await fetchGuardianOverview();
-      setGuardianData({
-        currentRiskLevel: data.current_risk_level,
-        recentSignals: data.recent_signals,
-        privacyNotes: data.privacy_notes,
+      const text = message.trim();
+      if (!text) {
+        setGuardianNote("No message to analyze.");
+        return;
+      }
+      const data = await predictSafety({ text });
+      const normalized = normalizePredictResponse(data);
+      const serverReasons = normalized.reasons;
+      const fallbackReasons = inferReasons(text, normalized.labelName);
+      const reasons =
+        serverReasons.length > 0 ? serverReasons : fallbackReasons;
+      const riskLevel = riskLevelFrom(
+        normalized.labelName,
+        normalized.unsafeScore,
+      );
+
+      setAnalysis({
+        status: "ready",
+        labelName: normalized.labelName,
+        unsafeScore: normalized.unsafeScore,
+        reasons,
+        riskCategory: normalized.riskCategory,
+        riskLevel,
       });
-      setGuardianNote("Live data loaded from backend.");
+
+      setGuardianNote(guardianCopy(riskLevel));
     } catch {
       setGuardianNote("Backend unavailable. Showing demo data.");
     } finally {
@@ -353,9 +416,9 @@ export default function App() {
               <div>
                 <Tabs value={tab} onChange={setTab} />
                 <div className="mt-4 text-xs text-slate-400">
-                  Backend base URL:{" "}
+                  API endpoint:{" "}
                   <span className="font-semibold text-slate-300">
-                    VITE_API_BASE_URL
+                    http://127.0.0.1:8000/predict
                   </span>
                 </div>
                 <div className="mt-3 text-base font-medium text-slate-200">
@@ -440,11 +503,7 @@ export default function App() {
                       <Button
                         tone="primary"
                         onClick={() => {
-                          applyExample(
-                            message,
-                            "Analysis completed (demo).",
-                            demoPresetFromText(message),
-                          );
+                          void onAnalyze();
                           handleChildSubmit();
                         }}
                       >
@@ -503,15 +562,21 @@ export default function App() {
                       <SignalPill>minimal disclosure</SignalPill>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <Button type="button">Ignore</Button>
-                      <Button type="button">Learn more</Button>
-                      <Button tone="danger" type="button">
+                      <Button type="button" onClick={actionIgnore}>
+                        Ignore
+                      </Button>
+                      <Button type="button" onClick={actionLearn}>
+                        Learn more
+                      </Button>
+                      <Button tone="danger" type="button" onClick={actionReport}>
                         Report anonymously
                       </Button>
-                      <Button type="button">Notify guardian</Button>
+                      <Button type="button" onClick={actionNotifyGuardian}>
+                        Notify guardian
+                      </Button>
                     </div>
                     <p className="mt-3 text-xs text-slate-400">
-                      Choose what happens next. No transcript is shared.
+                      {actionNote}
                     </p>
                   </div>
                 </div>
@@ -605,13 +670,28 @@ export default function App() {
                       Guardian Safety Overview
                     </h2>
                     <Badge
-                      tone={toneFromRiskLevel(guardianData.currentRiskLevel)}
+                      tone={toneFromRiskLevel(
+                        analysis.status === "ready"
+                          ? analysis.riskLevel
+                          : guardianData.currentRiskLevel,
+                      )}
                     >
-                      Current risk: {guardianData.currentRiskLevel}
+                      Current risk:{" "}
+                      {analysis.status === "ready"
+                        ? analysis.riskLevel
+                        : guardianData.currentRiskLevel}
                     </Badge>
                   </div>
+                  <p className="mt-2 text-sm text-slate-300">
+                    {analysis.status === "ready"
+                      ? guardianCopy(analysis.riskLevel)
+                      : guardianNote}
+                  </p>
                   <ul className="mt-4 space-y-2 text-sm text-slate-300">
-                    {guardianData.recentSignals.map((s) => (
+                    {(analysis.status === "ready" && analysis.reasons.length > 0
+                      ? analysis.reasons
+                      : guardianData.recentSignals
+                    ).map((s) => (
                       <li key={s} className="flex items-start gap-2">
                         <span className="mt-2 h-1 w-1 flex-none rounded-full bg-slate-400/70" />
                         <span>{s}</span>
@@ -628,7 +708,7 @@ export default function App() {
                       Refresh from backend
                     </Button>
                     <span className="text-xs text-slate-400">
-                      {guardianNote}
+                      {guardianLoading ? "Refreshing..." : "Pulling from /predict"}
                     </span>
                   </div>
                 </Card>
