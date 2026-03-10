@@ -10,8 +10,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Repository** | `ai-ddlc-template` |
-| **Purpose** | Personal AI-Driven Development Lifecycle template |
+| **Repository** | `SafeCircle` |
+| **Purpose** | SafeCircle SDK workspace guided by the project's software design, mission, and business context materials |
+| **Business context source** | `docs/` directory and the current canonical SDD URL: `https://github.com/colinwilliams91/SafeCircle/blob/docs/sdd-pdf/docs/safecircle_redesigned_reading_edition.pdf` |
+| **Brand context source** | `assets/` directory for logo, branding, and product-language reference material |
 | **Primary harness** | GitHub Copilot in VSCode |
 | **Implementation LLM** | Claude |
 | **Review LLM** | OpenAI (adversarial) |
@@ -20,9 +22,16 @@
 | **Portable skill path** | `.agents/skills/` |
 
 ### Goals
-- Provide a lightweight, language-agnostic scaffold for AI-driven development.
-- Facilitate multi-agent parallelisation with a clear inter-agent protocol.
-- Be easily cloned and adapted to any project stack.
+- Keep all agentic work aligned with the SafeCircle mission, requirements, and software design materials.
+- Treat `docs/` as the authoritative source for business and architecture context.
+- Use `assets/` to preserve brand and product-language consistency in user-facing work.
+
+## Business Context Sources
+
+- **Authoritative project docs** – `docs/` directory
+- **Current canonical SDD URL** – `https://github.com/colinwilliams91/SafeCircle/blob/docs/sdd-pdf/docs/safecircle_redesigned_reading_edition.pdf`
+- **Brand and visual references** – `assets/` directory
+- **Usage rule** – Agents should derive requirements from `docs/` and use `assets/` only as supporting branding context
 
 ---
 
@@ -39,6 +48,8 @@
 | AD-007 | Issue-Driven Orchestration is the default human-team workflow | Every work unit begins as a GitHub Issue; enforced via `issue-driven-orchestration.instructions.md`, `issue-intake.agent.md`, `resolve-issue.prompt.md`, `labels.yml`, and the enhanced PR template |
 | AD-008 | Shared skills live under `.agents/skills/` | Matches the multi-harness installer layout and keeps reusable skills portable across Copilot, Claude, Codex, Cursor, and similar tools |
 | AD-009 | Root adapter files point back to `CONTEXT.md` | Gives non-Copilot harnesses a stable entrypoint without duplicating project guidance |
+| AD-010 | `docs/` is authoritative for SafeCircle business context | Agents should consult `docs/` and the current canonical SDD URL for mission, requirements, and software design before changing business-facing behavior |
+| AD-011 | `assets/` is supporting brand context, not requirement authority | Agents may use `assets/` for naming, branding, and visual consistency, but must not derive business rules from assets alone |
 
 ---
 
@@ -59,6 +70,8 @@ _No tasks currently in flight. Update this section when work begins._
 - **Prompt files:** `<name>.prompt.md` in `.github/prompts/`.
 - **Instruction files:** `<name>.instructions.md` in `.github/instructions/`.
 - **Shared skills:** capability modules live in `.agents/skills/`.
+- **Business docs:** `docs/` holds mission, SDD, and related context materials.
+- **Brand assets:** `assets/` holds logos and other supporting brand references.
 - **Harness adapters:** root `AGENTS.md`, `CLAUDE.md`, and `.cursorrules` defer to `CONTEXT.md`.
 - **Commits:** Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - **Secrets:** Always via environment variables; never hard-coded.
@@ -98,6 +111,7 @@ _No tasks currently in flight. Update this section when work begins._
 | 2026-02-21 | Initial scaffold created | Copilot |
 | 2026-03-09 | Documented `.agents/skills/` as the canonical shared skills path and added root harness adapters | Copilot |
 | 2026-03-09 | Added a root Cursor adapter that routes to `CONTEXT.md` | Copilot |
+| 2026-03-10 | Added `docs/` and `assets/` as SafeCircle business-context sources and recorded the temporary canonical SDD URL | Copilot |
 
 ---
 

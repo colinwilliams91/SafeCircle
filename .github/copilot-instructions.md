@@ -10,15 +10,21 @@ all agents aligned to the latest state described in [`CONTEXT.md`](../CONTEXT.md
 
 1. **CONTEXT.md is the source of truth.** Always read it before acting and request the
    documenter agent updates it after any meaningful change.
-2. **Parallelise wherever safe.** Independent sub-tasks should be dispatched to separate
+2. **SafeCircle business context lives in `docs/` and `assets/`.** Consult the
+   business and design materials in `docs/` for mission, requirements, and architecture.
+   Until the PDF is merged to `main`, use the current canonical SDD URL:
+   `https://github.com/colinwilliams91/SafeCircle/blob/docs/sdd-pdf/docs/safecircle_redesigned_reading_edition.pdf`.
+   Use `assets/` for branding and product-language cues, but do not infer business
+   requirements from assets alone.
+3. **Parallelise wherever safe.** Independent sub-tasks should be dispatched to separate
    agents simultaneously. Serialise only when there is a true data dependency.
-3. **Claude implements; OpenAI reviews.** Implementation agents (Claude) write or refactor
+4. **Claude implements; OpenAI reviews.** Implementation agents (Claude) write or refactor
    code. Adversarial review agents (OpenAI) critique until consensus is reached.
-4. **RALPH loop governs iteration.** Every significant cycle follows:
+5. **RALPH loop governs iteration.** Every significant cycle follows:
    Reflect → Assess → Learn → Plan → Hypothesize before executing.
-5. **Language/framework agnostic.** All scaffolding must remain generic. No
+6. **Language/framework agnostic.** All scaffolding must remain generic. No
    project-specific assumptions belong here.
-6. **Secrets never leave the machine.** Never include API keys, tokens, or credentials
+7. **Secrets never leave the machine.** Never include API keys, tokens, or credentials
    in any committed file. Use `.env` (already git-ignored) or a secrets manager.
 
 ---
@@ -33,6 +39,8 @@ all agents aligned to the latest state described in [`CONTEXT.md`](../CONTEXT.md
 | `.github/plugins/` | Bundled plugin configurations |
 | `.github/scripts/` | Utility/maintenance scripts |
 | `.agents/skills/` | Shared capability modules installed for multi-harness reuse |
+| `docs/` | Authoritative business, mission, and software design materials |
+| `assets/` | Branding, logo, and product reference assets |
 | `CONTEXT.md` | Live workspace state – updated by the documenter agent |
 | `AGENTS.md` / `CLAUDE.md` | Thin root adapters for non-Copilot harnesses |
 
@@ -79,6 +87,7 @@ following as `customInstructions`:
 
 ```
 Repository context: .github/copilot-instructions.md and CONTEXT.md.
+Business context: docs/, assets/, and the current SDD URL in .github/copilot-instructions.md.
 Coding standards: .github/instructions/coding-standards.instructions.md.
 IDO rules: .github/instructions/issue-driven-orchestration.instructions.md.
 Open a draft PR immediately; convert to ready when all AC pass.
