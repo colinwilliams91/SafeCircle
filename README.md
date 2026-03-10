@@ -32,6 +32,17 @@ The system also illustrates how **secure network transport (VPN architecture)** 
 
 Together, these components showcase a practical architecture for **“safety without surveillance”** in modern digital platforms used by younger audiences.
 
+## Federated Learning Demo
+
+SafeCircle uses the **Flower Federated Learning Framework** to simulate decentralized training.
+
+Instead of sending raw user conversations to a central server, each client trains the safety model locally and only shares model updates.
+
+This approach improves the shared model while preserving user privacy.
+
+Flower framework:
+https://flower.ai/
+
 ---
 
 # Setup
