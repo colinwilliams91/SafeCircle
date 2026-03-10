@@ -176,3 +176,11 @@ mcp.local.json
 !*.pub.key
 # macOS
 .DS_Store
+
+# python
+venv
+venv/
+__pycache__/
+
+# ML
+models/
