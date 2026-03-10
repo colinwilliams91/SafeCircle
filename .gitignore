@@ -174,3 +174,6 @@ mcp.local.json
 !*.pub.key
 # macOS
 .DS_Store
+
+# Python
+venv/
