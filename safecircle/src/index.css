@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+@layer base {
+  /* External fonts are optional; fallbacks keep it usable offline. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Sans:wght@400;600;700&display=swap');
+}
+
+/* Keep only minimal global defaults; prefer Tailwind utilities in components. */
+:root {
+  font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+/* Background texture (no external assets). */
+.sc-bg {
+  background:
+    radial-gradient(900px 520px at 18% 12%, rgba(34, 211, 238, 0.18), transparent 58%),
+    radial-gradient(820px 520px at 82% 15%, rgba(251, 191, 36, 0.14), transparent 58%),
+    radial-gradient(960px 720px at 50% 100%, rgba(16, 185, 129, 0.12), transparent 60%),
+    radial-gradient(760px 520px at 60% 40%, rgba(99, 102, 241, 0.12), transparent 60%),
+    linear-gradient(180deg, #050816, #020617);
+}
+
+.sc-grain {
+  position: relative;
+}
+.sc-grain::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.10;
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,0.12), transparent 32%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 4px);
+  mix-blend-mode: overlay;
+}
+
+.sc-title {
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+.sc-glow {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 0 0 1px rgba(56, 189, 248, 0.06),
+    0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.sc-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.sc-sheen::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 60%
+  );
+  transform: translateX(-35%) rotate(6deg);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.sc-sheen:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-sheen::after {
+    display: none;
+  }
+}
