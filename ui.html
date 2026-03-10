@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeCircle Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    header {
+      background: #1e3a8a;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      background: #dbe4f3;
+      color: #1e3a8a;
+      font-weight: 700;
+    }
+
+    .tab-btn.active {
+      background: #1e3a8a;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+    }
+
+    .chat-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 16px;
+      min-height: 320px;
+    }
+
+    .message {
+      padding: 10px 14px;
+      border-radius: 14px;
+      margin: 10px 0;
+      max-width: 78%;
+      line-height: 1.4;
+    }
+
+    .other {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .me {
+      background: #2563eb;
+      color: white;
+      margin-left: auto;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    button.action {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .result-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 16px;
+      min-height: 320px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .badge-safe {
+      background: #bbf7d0;
+      color: #166534;
+    }
+
+    .badge-unsafe {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      padding: 18px;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #1e3a8a;
+      font-size: 17px;
+    }
+
+    .guardian-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    ul {
+      padding-left: 18px;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 850px) {
+      .grid,
+      .guardian-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    SafeCircle — Youth Safety Demo
+    <div class="subtitle">Safety without surveillance</div>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('chat', this)">Youth Chat</button>
+      <button class="tab-btn" onclick="showTab('privacy', this)">Privacy by Design</button>
+      <button class="tab-btn" onclick="showTab('guardian', this)">Guardian View</button>
+    </div>
+
+    <!-- TAB 1 -->
+    <div id="chat" class="tab-content active">
+      <div class="grid">
+        <div class="card">
+          <h2>Youth Chat Simulation</h2>
+          <div class="chat-box" id="chatBox">
+            <div class="message other">hey are you alone right now?</div>
+            <div class="message other">dont tell your parents</div>
+            <div class="message other">meet me after school behind the mall</div>
+          </div>
+
+          <div style="margin-top:16px;">
+            <label for="message"><strong>Test a message</strong></label>
+            <textarea id="message">meet me after school and dont tell your parents</textarea>
+
+            <div class="btn-row">
+              <button class="action primary" onclick="analyzeMessage()">Analyze Safety</button>
+              <button class="action secondary" onclick="fillSafe()">Safe Example</button>
+              <button class="action secondary" onclick="fillUnsafe()">Unsafe Example</button>
+              <button class="action secondary" onclick="fillBullying()">Bullying Example</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Safety Panel</h2>
+          <div class="result-box">
+            <div id="riskBadge" class="badge">No analysis yet</div>
+
+            <p id="riskText" class="muted">
+              The system will analyze the message and generate a privacy-preserving safety signal.
+            </p>
+
+            <h3>Why flagged</h3>
+            <ul id="reasonList">
+              <li>No analysis yet</li>
+            </ul>
+
+            <h3>Consent-based actions</h3>
+            <div class="btn-row">
+              <button class="action secondary" onclick="showAction('ignore')">Ignore</button>
+              <button class="action secondary" onclick="showAction('learn')">Learn More</button>
+              <button class="action danger" onclick="showAction('report')">Report Anonymously</button>
+            </div>
+
+            <div id="actionOutput" class="footer-note">
+              No action selected.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2 -->
+    <div id="privacy" class="tab-content">
+      <div class="privacy-grid">
+        <div class="mini-card">
+          <h3>Processed Locally</h3>
+          <p class="muted">Messages are analyzed close to the user instead of relying on full centralized chat collection.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>No Central Chat Storage</h3>
+          <p class="muted">The architecture is designed so private youth conversations do not need to be stored centrally.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Federated Learning</h3>
+          <p class="muted">The shared model improves through Flower federated learning using model updates rather than raw message uploads.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Minimal Metadata</h3>
+          <p class="muted">Only privacy-preserving safety signals are shared for reporting and summary workflows.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Consent-Based Reporting</h3>
+          <p class="muted">Users can choose whether to ignore, learn more, or report anonymously.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Privacy-Aware Guidance</h3>
+          <p class="muted">Guardians receive safety summaries instead of private message transcripts.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3 -->
+    <div id="guardian" class="tab-content">
+      <div class="guardian-grid">
+        <div class="card">
+          <h2>Guardian Safety Overview</h2>
+          <div class="badge badge-unsafe">Current Risk Level: Medium</div>
+
+          <ul>
+            <li>Repeated harassment language detected</li>
+            <li>Possible coercive pattern detected</li>
+            <li>Potential unsafe meetup suggestion</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Privacy Protections</h2>
+          <ul>
+            <li>No full transcript access</li>
+            <li>No message-by-message surveillance</li>
+            <li>Consent-based escalation options</li>
+            <li>Pattern summaries instead of message content exposure</li>
+          </ul>
+
+          <div class="footer-note">
+            Only risk summaries are shown. Message content is not stored in the guardian view.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "http://127.0.0.1:8000/predict";
+
+    function showTab(tabId, btn) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+
+      document.getElementById(tabId).classList.add("active");
+      btn.classList.add("active");
+    }
+
+    function fillSafe() {
+      document.getElementById("message").value = "thank you for helping me, see you tomorrow";
+    }
+
+    function fillUnsafe() {
+      document.getElementById("message").value = "meet me after school and dont tell your parents";
+    }
+
+    function fillBullying() {
+      document.getElementById("message").value = "nobody likes you and you are worthless";
+    }
+
+    function showAction(type) {
+      const output = document.getElementById("actionOutput");
+
+      if (type === "ignore") {
+        output.textContent = "Action selected: Ignore. No data is shared.";
+      } else if (type === "learn") {
+        output.textContent = "Action selected: Learn More. The user sees a privacy explanation and safety tips.";
+      } else if (type === "report") {
+        output.textContent = "Action selected: Report Anonymously. Only minimal safety signals would be shared, not the full transcript.";
+      }
+    }
+
+    function inferReasons(text, labelName) {
+      const lower = text.toLowerCase();
+      const reasons = [];
+
+      if (lower.includes("don't tell") || lower.includes("dont tell")) {
+        reasons.push("Secrecy request detected");
+      }
+      if (lower.includes("meet me")) {
+        reasons.push("Isolated meetup suggestion detected");
+      }
+      if (
+        lower.includes("worthless") ||
+        lower.includes("stupid") ||
+        lower.includes("nobody likes you")
+      ) {
+        reasons.push("Harassment / bullying language detected");
+      }
+      if (lower.includes("alone")) {
+        reasons.push("Isolation-related wording detected");
+      }
+
+      if (reasons.length === 0 && labelName === "unsafe") {
+        reasons.push("Unsafe language pattern detected");
+      }
+
+      if (reasons.length === 0 && labelName === "safe") {
+        reasons.push("No strong harmful pattern detected");
+      }
+
+      return reasons;
+    }
+
+    async function analyzeMessage() {
+      const text = document.getElementById("message").value.trim();
+      const badge = document.getElementById("riskBadge");
+      const riskText = document.getElementById("riskText");
+      const reasonList = document.getElementById("reasonList");
+
+      badge.className = "badge";
+      badge.textContent = "Analyzing...";
+      riskText.textContent = "Contacting SafeCircle API...";
+      reasonList.innerHTML = "<li>Processing message...</li>";
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: text })
+        });
+
+        const data = await response.json();
+
+        const labelName = data.label_name || "unknown";
+        const unsafeScore = typeof data.unsafe_score === "number" ? data.unsafe_score : 0;
+
+        if (labelName === "unsafe") {
+          badge.className = "badge badge-unsafe";
+          badge.textContent = "UNSAFE";
+          riskText.innerHTML = `<strong>Unsafe Score:</strong> ${unsafeScore.toFixed(3)}`;
+        } else {
+          badge.className = "badge badge-safe";
+          badge.textContent = "SAFE";
+          riskText.innerHTML = `<strong>Unsafe Score:</strong> ${unsafeScore.toFixed(3)}`;
+        }
+
+        const reasons = inferReasons(text, labelName);
+        reasonList.innerHTML = "";
+        reasons.forEach(reason => {
+          const li = document.createElement("li");
+          li.textContent = reason;
+          reasonList.appendChild(li);
+        });
+
+      } catch (error) {
+        badge.className = "badge badge-unsafe";
+        badge.textContent = "API ERROR";
+        riskText.textContent = "Could not reach the backend. Make sure uvicorn is running on port 8000.";
+        reasonList.innerHTML = "<li>Backend not available</li>";
+      }
+    }
+
+    // Optional: auto-run once on page load
+    // window.onload = function () {
+    //   analyzeMessage();
+    // };
+  </script>
+</body>
+</html>

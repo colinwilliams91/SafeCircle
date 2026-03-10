@@ -1,9 +1,19 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import math
 
 app = FastAPI()
+
+# Allow frontend running on another local port/file server
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # hackathon demo only
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class TextRequest(BaseModel):
     text: str
@@ -21,19 +31,16 @@ def predict(req: TextRequest):
     text = [req.text]
 
     pred = int(model.predict(text)[0])
-
     clf = model.named_steps["clf"]
 
-    # Prefer predict_proba if available
     if hasattr(clf, "predict_proba"):
         unsafe_score = float(model.predict_proba(text)[0][1])
     else:
-        # Fallback: convert decision_function to sigmoid probability
         score = float(model.decision_function(text)[0])
         unsafe_score = 1.0 / (1.0 + math.exp(-score))
 
     return {
         "label": pred,
         "label_name": "unsafe" if pred == 1 else "safe",
-        "unsafe_score": unsafe_score
+        "unsafe_score": unsafe_score,
     }
