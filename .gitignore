@@ -172,3 +172,5 @@ mcp.local.json
 *.pem
 *.key
 !*.pub.key
+# macOS
+.DS_Store
