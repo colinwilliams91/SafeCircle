@@ -6,8 +6,6 @@ SafeCircle is a prototype demonstrating how digital platforms can provide youth 
 
 ## Hackathon Submission
 
-This project was developed as a submission for the **FOSSASIA Hackathon 2026**, sponsored by ExpressVPN.
-
 ### Challenge
 
 Digital platforms increasingly serve younger generations of users, yet many existing safety mechanisms rely on centralized monitoring or invasive data collection. The challenge is to design systems where safety and responsible data practices are embedded by design while preserving privacy and user autonomy.
@@ -59,13 +57,11 @@ The goal is to show how platforms can **detect harmful patterns while minimizing
 
 ---
 
-# Setup
-
 ## Requirements
 
 - Python **3.13+** (recommended: Python 3.13.3)
 - pip
-- nodejs ** **
+- nodejs v20
 
 ## Create the environment
 
@@ -116,22 +112,35 @@ Make sure the API is running:
 ```bash
 uvicorn api:app --reload --port 8000
 ```
+Navigate to the demo frontend:
 
-Install dependencies frontend:
+```
+cd safecircle_frontend
+```
+
+Install dependencies:
 
 ```bash
-npm install 
+npm install
 ```
 
 Run app frontend:
 ```bash
-npm run dev 
+npm run dev
 ```
 
 Open the browser:
 
 ```
 http://127.0.0.1:5173
+```
+
+Examine in Web Browser view or Mobile Emulated view: DevTools -> Toggle Device Emulation
+
+```bash
+# in your web browser
+ctrl + shift + i
+ctrl + shift + m
 ```
 
 ---
@@ -207,37 +216,6 @@ uvicorn api:app --reload --port 8000
 ```
 
 Then run:
-
-```bash
-python3 demo_app.py
-```
-
----
-
-# Full Demo Run Order
-
-To run the **complete demo environment**, execute:
-
-```bash
-python3 -m venv venv && source venv/bin/activate
-pip3 install -r requirements.txt
-mkdir -p data/client1 data/client2 data/client3 models
-python3 make_data.py
-python3 train_data.py
-uvicorn api:app --reload --port 8000
-python3 server.py
-python3 client.py --data data/client1/train.csv
-python3 client.py --data data/client2/train.csv
-python3 client.py --data data/client3/train.csv
-```
-
-Optional frontend demo:
-
-```bash
-python3 -m http.server 5500
-```
-
-Optional SDK demo:
 
 ```bash
 python3 demo_app.py
