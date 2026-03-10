@@ -1,5 +1,40 @@
 # SafeCircle — Privacy-First Youth Safety System
 
+SafeCircle is a prototype demonstrating how digital platforms can provide youth safety protections without invasive monitoring.
+
+---
+
+## Hackathon Submission
+
+This project was developed as a submission for the **FOSSASIA Hackathon 2026**, sponsored by ExpressVPN.
+
+### Challenge
+
+Digital platforms increasingly serve younger generations of users, yet many existing safety mechanisms rely on centralized monitoring or invasive data collection. The challenge is to design systems where safety and responsible data practices are embedded by design while preserving privacy and user autonomy.
+
+### Our Approach
+
+SafeCircle demonstrates a privacy-first youth safety architecture that combines:
+
+- AI safety analysis
+- Federated learning with Flower
+- Privacy-preserving safety signals
+- Consent-based reporting
+- VPN-protected network architecture
+
+## Submission Summary
+
+**SafeCircle** is a privacy-first youth safety prototype built for the **FOSSASIA Hackathon 2026 (ExpressVPN Challenge)**.
+
+The project demonstrates how digital platforms can implement safety features without relying on centralized monitoring or invasive data collection. SafeCircle combines **AI-based message analysis**, **federated learning with the Flower framework**, and **privacy-preserving safety signals** to detect potentially harmful interactions while keeping user conversations private.
+
+The system also illustrates how **secure network transport (VPN architecture)** can protect communication between clients and servers, minimizing metadata exposure. Instead of storing full message histories, the platform generates minimal safety indicators that support **consent-based reporting and privacy-aware guardian guidance**.
+
+Together, these components showcase a practical architecture for **“safety without surveillance”** in modern digital platforms used by younger audiences.
+
+---
+
+# Setup
 SafeCircle is a prototype demonstrating how digital platforms can provide **youth safety protections without invasive monitoring**.
 
 The system combines:
@@ -14,6 +49,11 @@ The goal is to show how platforms can **detect harmful patterns while minimizing
 ---
 
 # Setup
+
+## Requirements
+
+- Python **3.13+** (recommended: Python 3.13.3)
+- pip
 
 ## Create the environment
 
