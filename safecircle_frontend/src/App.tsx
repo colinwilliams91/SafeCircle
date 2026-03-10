@@ -339,7 +339,7 @@ export default function App() {
   function renderSafetyPanel(showAdminActions: boolean) {
     return (
       <Card className="sc-glow sc-sheen">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">Safety Panel</h2>
           <Badge
             tone={
@@ -399,11 +399,11 @@ export default function App() {
   return (
     <div className="sc-bg min-h-screen text-slate-100">
       <div className="sc-grain min-h-screen">
-        <div className="w-full px-5 py-10">
+        <div className="w-full px-4 py-8 sm:px-5 sm:py-10">
           <header className="mx-auto w-full max-w-none text-center">
-            <div className="flex min-h-[60vh] w-full flex-col items-center justify-center gap-6">
+            <div className="flex min-h-[40vh] sm:min-h-[60vh] w-full flex-col items-center justify-center gap-6">
               <div className="mx-auto flex w-full max-w-none flex-col items-center">
-                <h1 className="sc-title w-full text-center text-5xl font-semibold">
+                <h1 className="sc-title w-full text-center text-3xl sm:text-4xl md:text-5xl font-semibold">
                   Safe Circle
                 </h1>
                 <p className="mt-3 max-w-3xl text-center text-sm text-slate-300">
@@ -432,7 +432,7 @@ export default function App() {
             {tab === "child" ? (
               <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
                 <Card className="sc-glow sc-sheen">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <h2 className="text-lg font-semibold">Child Chat</h2>
                       <p className="mt-1 text-xs text-slate-400">
@@ -555,7 +555,7 @@ export default function App() {
                 <div ref={safetyPanelRef}>
                   {renderSafetyPanel(false)}
                   <div className="mt-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10">
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="text-sm font-semibold text-slate-200">
                         What do you want to do?
                       </div>
@@ -595,7 +595,7 @@ export default function App() {
             {tab === "privacy" ? (
               <div className="space-y-8">
                 <div className="text-center">
-                  <h2 className="sc-title text-3xl font-semibold">
+                  <h2 className="sc-title text-2xl sm:text-3xl font-semibold">
                     Why you can trust the warning
                   </h2>
                   <p className="mt-2 text-sm text-slate-300">
@@ -665,7 +665,7 @@ export default function App() {
             {tab === "guardian" ? (
               <div className="grid gap-5 lg:grid-cols-2">
                 <Card className="sc-glow sc-sheen">
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
                     <h2 className="text-lg font-semibold">
                       Guardian Safety Overview
                     </h2>
