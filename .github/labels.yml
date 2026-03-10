@@ -1,0 +1,106 @@
+# GitHub Labels — IDO Taxonomy
+#
+# Apply with:
+#   gh label create "<name>" --color "<hex>" --description "<desc>" --repo OWNER/REPO
+#
+# Or in bulk using the GitHub CLI label sync tool:
+#   https://github.com/nicovince/gh-label-sync
+#
+# Prefix convention: <category>:<value>
+# ─────────────────────────────────────────
+
+# ── type: ─────────────────────────────────────────────────────────────────────
+- name: "type:feature"
+  color: "0075ca"
+  description: "New capability or enhancement"
+
+- name: "type:bug"
+  color: "d73a4a"
+  description: "Something is broken"
+
+- name: "type:docs"
+  color: "e4e669"
+  description: "Documentation only change"
+
+- name: "type:refactor"
+  color: "cfd3d7"
+  description: "Code restructuring — no behaviour change"
+
+- name: "type:test"
+  color: "bfd4f2"
+  description: "Test coverage improvement"
+
+- name: "type:chore"
+  color: "fef2c0"
+  description: "Dependency update, tooling, or CI maintenance"
+
+- name: "type:research"
+  color: "f9d0c4"
+  description: "Spike or time-boxed exploration"
+
+# ── agent: ────────────────────────────────────────────────────────────────────
+- name: "agent:copilot"
+  color: "0d1117"
+  description: "Assign to Copilot coding agent (copilot-swe-agent)"
+
+- name: "agent:implementer"
+  color: "5319e7"
+  description: "Route to Implementer agent (Claude)"
+
+- name: "agent:reviewer"
+  color: "b60205"
+  description: "Route to Reviewer agent (adversarial, OpenAI)"
+
+- name: "agent:documenter"
+  color: "1d76db"
+  description: "Route to Documenter agent (CONTEXT.md update)"
+
+- name: "agent:ralph"
+  color: "e99695"
+  description: "Trigger RALPH iterative improvement loop"
+
+- name: "agent:orchestrator"
+  color: "006b75"
+  description: "Needs Orchestrator decomposition before dispatch"
+
+# ── status: ───────────────────────────────────────────────────────────────────
+- name: "status:triage"
+  color: "ededed"
+  description: "Newly filed — needs routing and label assignment"
+
+- name: "status:ready"
+  color: "0e8a16"
+  description: "AC confirmed; implementation may begin"
+
+- name: "status:in-progress"
+  color: "fbca04"
+  description: "Agent or human is actively working"
+
+- name: "status:blocked"
+  color: "e11d48"
+  description: "Waiting on dependency, decision, or external input"
+
+- name: "status:review"
+  color: "7057ff"
+  description: "PR open — awaiting review and approval"
+
+- name: "status:done"
+  color: "c2e0c6"
+  description: "Merged and closed"
+
+# ── priority: ─────────────────────────────────────────────────────────────────
+- name: "priority:critical"
+  color: "b60205"
+  description: "Blocking — must resolve in current cycle"
+
+- name: "priority:high"
+  color: "e99695"
+  description: "Next in queue after critical items"
+
+- name: "priority:normal"
+  color: "fef2c0"
+  description: "Standard queue position"
+
+- name: "priority:low"
+  color: "c2e0c6"
+  description: "Nice to have — address when capacity allows"
