@@ -65,6 +65,7 @@ The goal is to show how platforms can **detect harmful patterns while minimizing
 
 - Python **3.13+** (recommended: Python 3.13.3)
 - pip
+- nodejs ** **
 
 ## Create the environment
 
@@ -116,16 +117,21 @@ Make sure the API is running:
 uvicorn api:app --reload --port 8000
 ```
 
-Serve the frontend:
+Install dependencies frontend:
 
 ```bash
-python3 -m http.server 5500
+npm install 
+```
+
+Run app frontend:
+```bash
+npm run dev 
 ```
 
 Open the browser:
 
 ```
-http://127.0.0.1:5500/ui.html
+http://127.0.0.1:5173
 ```
 
 ---
