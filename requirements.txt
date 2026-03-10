@@ -1,6 +1,6 @@
 flwr==1.11.0
 scikit-learn==1.5.2
-numpy==2.0.2
+numpy==1.26.4
 pandas==2.2.2
 fastapi==0.115.0
 uvicorn==0.30.6

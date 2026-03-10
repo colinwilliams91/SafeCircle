@@ -1,23 +1,38 @@
 import argparse
-import joblib
 import flwr as fl
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score
 
 
 def load_data(csv_path: str):
     df = pd.read_csv(csv_path)
-    return df["text"].tolist(), df["label"].tolist()
+    return df["text"].astype(str).tolist(), df["label"].astype(int).tolist()
 
 
 def build_model() -> Pipeline:
     return Pipeline(
         [
-            ("tfidf", TfidfVectorizer()),
-            ("clf", SGDClassifier(loss="log_loss", random_state=42)),
+            (
+                "vec",
+                HashingVectorizer(
+                    n_features=256,
+                    alternate_sign=False,
+                    norm="l2"
+                ),
+            ),
+            (
+                "clf",
+                SGDClassifier(
+                    loss="log_loss",
+                    random_state=42,
+                    max_iter=1,
+                    tol=None,
+                    warm_start=True,
+                ),
+            ),
         ]
     )
 
@@ -28,7 +43,7 @@ class SafeCircleClient(fl.client.NumPyClient):
         self.x_train, self.y_train = load_data(data_path)
         self.model = build_model()
 
-        # initialize shapes
+        # Initialize classifier classes and shapes
         self.model.fit(self.x_train, self.y_train)
 
     def get_parameters(self, config):
@@ -39,7 +54,7 @@ class SafeCircleClient(fl.client.NumPyClient):
         clf = self.model.named_steps["clf"]
         clf.coef_ = parameters[0]
         clf.intercept_ = parameters[1]
-        clf.classes_ = self.model.named_steps["clf"].classes_
+        clf.classes_ = [0, 1]
 
     def fit(self, parameters, config):
         self.set_parameters(parameters)
@@ -63,7 +78,7 @@ def main():
     args = parser.parse_args()
 
     client = SafeCircleClient(args.data)
-    fl.client.start_numpy_client(server_address=args.server, client=client)
+    fl.client.start_client(server_address=args.server, client=client.to_client(),)
 
 
 if __name__ == "__main__":

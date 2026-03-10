@@ -1,16 +1,11 @@
 import flwr as fl
 
-
 def fit_config(server_round: int):
-    return {
-        "server_round": server_round,
-    }
+    return {"server_round": server_round}
 
 
 def evaluate_config(server_round: int):
-    return {
-        "server_round": server_round,
-    }
+    return {"server_round": server_round}
 
 
 def main():
